@@ -163,24 +163,24 @@ class SwaggerParser(object):
                 return self._get_example_from_basic_type(prop_spec['type'])[0]
 
     @staticmethod
-    def _get_example_from_basic_type(type):
+    def _get_example_from_basic_type(prop_type):
         """Get example from the given type.
 
         Args:
-            type: the type you want an example of.
+            prop_type: the property type you want an example of.
 
         Returns:
-            An array with two example values of the given type.
+            An array with two example values of the given property type.
         """
-        if type == 'integer':
+        if prop_type == 'integer':
             return [42, 24]
-        elif type == 'number':
+        elif prop_type == 'number':
             return [5.5, 5.5]
-        elif type == 'string':
+        elif prop_type == 'string':
             return ['string', 'string2']
-        elif type == 'datetime':
+        elif prop_type == 'datetime':
             return ['2015-08-28T09:02:57.481Z', '2015-08-28T09:02:57.481Z']
-        elif type == 'boolean':
+        elif prop_type == 'boolean':
             return [False, True]
 
     def _example_from_definition(self, prop_spec):
