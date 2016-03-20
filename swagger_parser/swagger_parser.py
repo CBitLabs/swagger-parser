@@ -68,6 +68,7 @@ class SwaggerParser(object):
                                                                               exc))
 
         # Run parsing
+        self.parameter_definitions = parameter_definitions
         self.use_example = use_example
         self.base_path = self.specification.get('basePath', '')
         self.definitions_example = {}
@@ -75,7 +76,6 @@ class SwaggerParser(object):
         self.paths = {}
         self.operation = {}
         self.get_paths_data()
-        self.parameter_definitions = parameter_definitions
 
     def build_definitions_example(self):
         """Parse all definitions in the swagger specification."""
