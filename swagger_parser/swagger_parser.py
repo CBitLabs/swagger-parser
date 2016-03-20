@@ -159,20 +159,21 @@ class SwaggerParser(object):
             return self._example_from_array_spec(prop_spec)
         elif prop_spec['type'] == 'file':  # File
             return (StringIO('my file contents'), 'hello world.txt')
+        elif 'name' in prop_spec.keys() and prop_spec['name'] in self.parameter_definitions.keys():
+            return self._get_example_from_parameter_definitions(prop_spec)[0]
         else:  # Basic types
             if 'format' in prop_spec.keys() and prop_spec['format'] == 'date-time':
                 return self._get_example_from_basic_type('datetime')[0]
             else:
                 return self._get_example_from_basic_type(prop_spec['type'])[0]
 
-    @staticmethod
-    def _get_example_from_parameter_definitions(prop_spec):
+    def _get_example_from_parameter_definitions(self, prop_spec):
         """Get example for a custom definied parameter
         Args:
             prop_spec: the property specification
         Returns:
             An array with custom examples"""
-        return self.parameter_definitions[prop_spec['name']][0]
+        return self.parameter_definitions[prop_spec['name']]
 
     @staticmethod
     def _get_example_from_basic_type(prop_type):
