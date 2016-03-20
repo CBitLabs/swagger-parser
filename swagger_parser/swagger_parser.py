@@ -30,7 +30,7 @@ class SwaggerParser(object):
     _HTTP_VERBS = set(['get', 'put', 'post', 'delete', 'options', 'head',
                        'patch'])
 
-    def __init__(self, swagger_path=None, swagger_dict=None, use_example=True):
+    def __init__(self, swagger_path=None, swagger_dict=None, use_example=True, parameter_definitions={}):
         """Run parsing from either a file or a dict.
 
         Args:
@@ -40,6 +40,8 @@ class SwaggerParser(object):
                          build definitions example (False value can be useful
                          when making test. Problem can happen if set to True, eg
                          POST {'id': 'example'}, GET /string => 404).
+            custom_parameter_definitions: A dictionary of custom examples for
+                                          path parameters.
 
         Raises:
             - ValueError: if no swagger_path or swagger_dict is specified.
@@ -73,6 +75,7 @@ class SwaggerParser(object):
         self.paths = {}
         self.operation = {}
         self.get_paths_data()
+        self.custom_parameter_definitions = custom_parameter_definitions
 
     def build_definitions_example(self):
         """Parse all definitions in the swagger specification."""
@@ -161,6 +164,15 @@ class SwaggerParser(object):
                 return self._get_example_from_basic_type('datetime')[0]
             else:
                 return self._get_example_from_basic_type(prop_spec['type'])[0]
+
+    @staticmethod
+    def _get_example_from_custom_parameter_definitions(prop_spec):
+        """Get example for a custom definied parameter
+        Args:
+            prop_spec: the property specification
+        Returns:
+            An array with custom examples"""
+        return self.custom_parameter_definitions[prop_spec['name']][0]
 
     @staticmethod
     def _get_example_from_basic_type(prop_type):
