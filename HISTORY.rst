@@ -2,6 +2,17 @@
 History
 =======
 
+0.1.8 (2016-5-11)
+------------------
+
+* Support type field to be an array.
+* Use base path to validate request.
+
+0.1.7 (2016-4-1)
+------------------
+
+* Support UTF-8 in swagger.yaml.
+
 0.1.6 (2016-3-16)
 ------------------
 

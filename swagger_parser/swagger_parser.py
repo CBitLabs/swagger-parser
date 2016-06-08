@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import codecs
 import datetime
 import jinja2
 import json
@@ -49,7 +50,7 @@ class SwaggerParser(object):
             if swagger_path is not None:
                 # Open yaml file
                 arguments = {}
-                with open(swagger_path, 'r') as swagger_yaml:
+                with codecs.open(swagger_path, 'r', 'utf-8') as swagger_yaml:
                     swagger_template = swagger_yaml.read()
                     swagger_string = jinja2.Template(swagger_template).render(**arguments)
                     self.specification = yaml.load(swagger_string)
@@ -159,6 +160,8 @@ class SwaggerParser(object):
         else:  # Basic types
             if 'format' in prop_spec.keys() and prop_spec['format'] == 'date-time':
                 return self._get_example_from_basic_type('datetime')[0]
+            elif isinstance(prop_spec['type'], list):  # Type is a list
+                return self._get_example_from_basic_type(prop_spec['type'][0])[0]
             else:
                 return self._get_example_from_basic_type(prop_spec['type'])[0]
 
@@ -356,6 +359,7 @@ class SwaggerParser(object):
         Get also the list of operationId.
         """
         for path, path_spec in self.specification['paths'].items():
+            path = u'{0}{1}'.format(self.base_path, path)
             self.paths[path] = {}
 
             # Add path-level parameters
